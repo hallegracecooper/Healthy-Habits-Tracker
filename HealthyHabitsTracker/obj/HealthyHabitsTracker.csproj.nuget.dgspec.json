@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\halle\\OneDrive\\Documents\\Halle BYUI 25\\Term 5\\CSE325\\Group Project\\CSE325-Group-Project\\Healthy-Habits-Tracker\\HealthyHabitsTracker\\HealthyHabitsTracker.csproj": {}
+    "C:\\Users\\halle\\OneDrive\\Documents\\Halle BYUI 25\\Term 5\\CSE325\\Group Project\\CSE325-Group-Project\\Healthy-Habits-Tracker\\HealthyHabitsTracker\\HealthyHabitsTracker.csproj": {}
   },
   "projects": {
-    "c:\\Users\\halle\\OneDrive\\Documents\\Halle BYUI 25\\Term 5\\CSE325\\Group Project\\CSE325-Group-Project\\Healthy-Habits-Tracker\\HealthyHabitsTracker\\HealthyHabitsTracker.csproj": {
+    "C:\\Users\\halle\\OneDrive\\Documents\\Halle BYUI 25\\Term 5\\CSE325\\Group Project\\CSE325-Group-Project\\Healthy-Habits-Tracker\\HealthyHabitsTracker\\HealthyHabitsTracker.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\halle\\OneDrive\\Documents\\Halle BYUI 25\\Term 5\\CSE325\\Group Project\\CSE325-Group-Project\\Healthy-Habits-Tracker\\HealthyHabitsTracker\\HealthyHabitsTracker.csproj",
+        "projectUniqueName": "C:\\Users\\halle\\OneDrive\\Documents\\Halle BYUI 25\\Term 5\\CSE325\\Group Project\\CSE325-Group-Project\\Healthy-Habits-Tracker\\HealthyHabitsTracker\\HealthyHabitsTracker.csproj",
         "projectName": "HealthyHabitsTracker",
-        "projectPath": "c:\\Users\\halle\\OneDrive\\Documents\\Halle BYUI 25\\Term 5\\CSE325\\Group Project\\CSE325-Group-Project\\Healthy-Habits-Tracker\\HealthyHabitsTracker\\HealthyHabitsTracker.csproj",
+        "projectPath": "C:\\Users\\halle\\OneDrive\\Documents\\Halle BYUI 25\\Term 5\\CSE325\\Group Project\\CSE325-Group-Project\\Healthy-Habits-Tracker\\HealthyHabitsTracker\\HealthyHabitsTracker.csproj",
         "packagesPath": "C:\\Users\\halle\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\halle\\OneDrive\\Documents\\Halle BYUI 25\\Term 5\\CSE325\\Group Project\\CSE325-Group-Project\\Healthy-Habits-Tracker\\HealthyHabitsTracker\\obj\\",
+        "outputPath": "C:\\Users\\halle\\OneDrive\\Documents\\Halle BYUI 25\\Term 5\\CSE325\\Group Project\\CSE325-Group-Project\\Healthy-Habits-Tracker\\HealthyHabitsTracker\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\halle\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -43,6 +43,22 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[9.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.9, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

@@ -1,0 +1,47 @@
+@page "/dashboard"
+@using HealthyHabitsTracker.Data
+@using HealthyHabitsTracker.Models
+@using Microsoft.AspNetCore.Components.Web
+@inject AppDbContext Db
+
+<PageTitle>Dashboard</PageTitle>
+
+<h3>Dashboard</h3>
+<p>This is your dashboard. We will show habits and progress here.</p>
+
+@if (habits is null)
+{
+    <p>Loading...</p>
+}
+else if (!habits.Any())
+{
+    <p>No habits yet. Go add one!</p>
+}
+else
+{
+    <ul>
+        @foreach (var h in habits)
+        {
+            <li>
+                <strong>@h.Title</strong> - @h.Description
+                @if (h.IsComplete)
+                {
+                    <span> (completed today)</span>
+                }
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Habit>? habits;
+
+    protected override void OnInitialized()
+    {
+        // Placeholder query (no auth yet): show all habits for now.
+        habits = Db.Habits
+        .OrderByDescending(h => h.DateCreated)
+        .Take(10)
+        .ToList();
+    }
+}
