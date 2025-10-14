@@ -1,16 +1,14 @@
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace HealthyHabitsTracker.Models
 {
-    public class AppUser
+    // Inherit from IdentityUser to get secure password hashing, lockout, etc.
+    public class AppUser : IdentityUser
     {
-        [Key]
-        public string UserId { get; set; } = string.Empty;
-
-        [Required, EmailAddress]
-        public string Email { get; set; } = string.Empty;
-
-        // We'll store hashed passwords later when we add auth.
-        public string PasswordHash { get; set; } = string.Empty;
+        // You can add profile fields here later (e.g., DisplayName)
+        // Example:
+        // [StringLength(100)]
+        // public string? DisplayName { get; set; }
     }
 }

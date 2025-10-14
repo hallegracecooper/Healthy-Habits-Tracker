@@ -1,7 +1,9 @@
+@attribute [Authorize]
 @page "/dashboard"
 @using HealthyHabitsTracker.Data
 @using HealthyHabitsTracker.Models
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.EntityFrameworkCore
 @inject AppDbContext Db
 
 <PageTitle>Dashboard</PageTitle>
@@ -36,12 +38,12 @@ else
 @code {
     private List<Habit>? habits;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         // Placeholder query (no auth yet): show all habits for now.
-        habits = Db.Habits
+        habits = await Db.Habits
         .OrderByDescending(h => h.DateCreated)
         .Take(10)
-        .ToList();
+        .ToListAsync();
     }
 }
