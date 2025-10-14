@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "HealthyHabitsTracker/1.0.0": {
+        "runtime": {
+          "HealthyHabitsTracker.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "HealthyHabitsTracker/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
