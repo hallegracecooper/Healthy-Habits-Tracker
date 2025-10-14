@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HealthyHabitsTracker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1620f12608b7738c86da398afb31ba48add49d8d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+23ea67edacb1d4eec1c162994a76515794c1d4fd")]
 [assembly: System.Reflection.AssemblyProductAttribute("HealthyHabitsTracker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HealthyHabitsTracker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
