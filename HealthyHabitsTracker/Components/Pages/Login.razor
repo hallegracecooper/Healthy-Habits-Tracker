@@ -1,6 +1,14 @@
 @page "/login"
-@using Microsoft.AspNetCore.Components.Web
-<PageTitle>Login</PageTitle>
+@attribute [AllowAnonymous]
+@inject NavigationManager Nav
 
-<h3>Login</h3>
-<p>Login form will go here in Day 1 Part 2.</p>
+@code {
+    [Parameter][SupplyParameterFromQuery] public string? returnUrl { get; set; }
+
+    protected override void OnInitialized()
+    {
+        var target = string.IsNullOrWhiteSpace(returnUrl) ? "/dashboard" : returnUrl!;
+        var encoded = Uri.EscapeDataString(target);
+        Nav.NavigateTo($"/Identity/Account/Login?returnUrl={encoded}", forceLoad: true);
+    }
+}

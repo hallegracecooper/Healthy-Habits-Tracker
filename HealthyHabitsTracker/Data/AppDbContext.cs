@@ -1,21 +1,22 @@
 using HealthyHabitsTracker.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HealthyHabitsTracker.Data
 {
-    public class AppDbContext : DbContext
+    // Use IdentityDbContext so ASP.NET Identity can create its tables
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
 
         public DbSet<Habit> Habits => Set<Habit>();
-        public DbSet<AppUser> Users => Set<AppUser>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Example: index on UserId + Title to avoid duplicate habit titles per user (optional right now)
+            // Example index to speed up common queries
             modelBuilder.Entity<Habit>()
                 .HasIndex(h => new { h.UserId, h.Title })
                 .IsUnique(false);

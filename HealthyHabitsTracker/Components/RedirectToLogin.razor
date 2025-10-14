@@ -1,0 +1,10 @@
+@inject NavigationManager Nav
+
+@code {
+    protected override void OnInitialized()
+    {
+        // Preserve returnUrl so we can come back after login
+        var returnUrl = Uri.EscapeDataString(Nav.Uri);
+        Nav.NavigateTo($"/Identity/Account/Login?returnUrl={returnUrl}", forceLoad: true);
+    }
+}
