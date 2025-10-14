@@ -1,28 +1,42 @@
-using HealthyHabitsTracker.Components;
+using HealthyHabitsTracker.Data;
+using HealthyHabitsTracker.Components; // for App
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+// === DbContext (SQLite) ===
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                      ?? "Data Source=app.db";
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(connectionString)
+);
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Pipeline
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-
-
+app.UseStaticFiles();
 app.UseAntiforgery();
 
-app.MapStaticAssets();
+// Map the root Razor component (Blazor Web App pattern)
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+   .AddInteractiveServerRenderMode();
+
+// Ensure DB/migrations in dev
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
 
 app.Run();

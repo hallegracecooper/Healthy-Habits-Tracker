@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HealthyHabitsTracker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8fa88957bd86890c2858d7fef6273f8d9fffb32c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6ea043bcfdc7647bb6a2c8ff45440ff684e1b475")]
 [assembly: System.Reflection.AssemblyProductAttribute("HealthyHabitsTracker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HealthyHabitsTracker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
