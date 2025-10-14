@@ -36,12 +36,28 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/halle/OneDrive/Documents/Halle BYUI 25/Term 5/CSE325/Group Project/CSE325-Group-Project/Healthy-Habits-Tracker/HealthyHabitsTracker/Components/Pages/Dashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEYXNoYm9hcmQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/halle/OneDrive/Documents/Halle BYUI 25/Term 5/CSE325/Group Project/CSE325-Group-Project/Healthy-Habits-Tracker/HealthyHabitsTracker/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/halle/OneDrive/Documents/Halle BYUI 25/Term 5/CSE325/Group Project/CSE325-Group-Project/Healthy-Habits-Tracker/HealthyHabitsTracker/Components/Pages/HabitForm.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIYWJpdEZvcm0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/halle/OneDrive/Documents/Halle BYUI 25/Term 5/CSE325/Group Project/CSE325-Group-Project/Healthy-Habits-Tracker/HealthyHabitsTracker/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/halle/OneDrive/Documents/Halle BYUI 25/Term 5/CSE325/Group Project/CSE325-Group-Project/Healthy-Habits-Tracker/HealthyHabitsTracker/Components/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/halle/OneDrive/Documents/Halle BYUI 25/Term 5/CSE325/Group Project/CSE325-Group-Project/Healthy-Habits-Tracker/HealthyHabitsTracker/Components/Pages/Register.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZWdpc3Rlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/halle/OneDrive/Documents/Halle BYUI 25/Term 5/CSE325/Group Project/CSE325-Group-Project/Healthy-Habits-Tracker/HealthyHabitsTracker/Components/Pages/Weather.razor]
@@ -54,22 +70,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/halle/OneDrive/Documents/Halle BYUI 25/Term 5/CSE325/Group Project/CSE325-Group-Project/Healthy-Habits-Tracker/HealthyHabitsTracker/Components/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/halle/OneDrive/Documents/Halle BYUI 25/Term 5/CSE325/Group Project/CSE325-Group-Project/Healthy-Habits-Tracker/HealthyHabitsTracker/Pages/Dashboard.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGFzaGJvYXJkLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/halle/OneDrive/Documents/Halle BYUI 25/Term 5/CSE325/Group Project/CSE325-Group-Project/Healthy-Habits-Tracker/HealthyHabitsTracker/Pages/HabitForm.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSGFiaXRGb3JtLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/halle/OneDrive/Documents/Halle BYUI 25/Term 5/CSE325/Group Project/CSE325-Group-Project/Healthy-Habits-Tracker/HealthyHabitsTracker/Pages/Login.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4ucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/halle/OneDrive/Documents/Halle BYUI 25/Term 5/CSE325/Group Project/CSE325-Group-Project/Healthy-Habits-Tracker/HealthyHabitsTracker/Pages/Register.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0ZXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/halle/OneDrive/Documents/Halle BYUI 25/Term 5/CSE325/Group Project/CSE325-Group-Project/Healthy-Habits-Tracker/HealthyHabitsTracker/Components/Layout/MainLayout.razor]
