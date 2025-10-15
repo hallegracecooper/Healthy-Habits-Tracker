@@ -1,5 +1,6 @@
 using HealthyHabitsTracker.Data;
 using HealthyHabitsTracker.Components; // App
+using HealthyHabitsTracker.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -175,6 +176,107 @@ app.MapPost("/auth/logout", async (HttpContext http) =>
 {
     await http.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     return Results.Redirect("/");
+});
+
+// ===================== HABIT ENDPOINTS ==========================
+
+// Helpers
+static string? GetUserId(HttpContext http) =>
+    http.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+// CREATE
+app.MapPost("/habits/create", async (HttpContext http, AppDbContext db) =>
+{
+    var userId = GetUserId(http);
+    if (string.IsNullOrEmpty(userId)) return Results.Unauthorized();
+
+    if (!http.Request.HasFormContentType) return Results.BadRequest("Invalid form.");
+
+    var form = await http.Request.ReadFormAsync();
+    var title = (form["Title"].ToString() ?? "").Trim();
+    var description = (form["Description"].ToString() ?? "").Trim();
+
+    if (string.IsNullOrWhiteSpace(title))
+        return Results.BadRequest("Title is required.");
+
+    var habit = new Habit
+    {
+        UserId = userId,
+        Title = title,
+        Description = string.IsNullOrWhiteSpace(description) ? null : description,
+        IsComplete = false,
+        DateCreated = DateTime.UtcNow,
+        LastCompletedDate = null
+    };
+
+    db.Habits.Add(habit);
+    await db.SaveChangesAsync();
+    return Results.Redirect("/dashboard");
+});
+
+// EDIT
+app.MapPost("/habits/edit", async (HttpContext http, AppDbContext db) =>
+{
+    var userId = GetUserId(http);
+    if (string.IsNullOrEmpty(userId)) return Results.Unauthorized();
+    if (!http.Request.HasFormContentType) return Results.BadRequest("Invalid form.");
+
+    var form = await http.Request.ReadFormAsync();
+    if (!int.TryParse(form["HabitId"], out var habitId)) return Results.BadRequest("HabitId required.");
+
+    var title = (form["Title"].ToString() ?? "").Trim();
+    var description = (form["Description"].ToString() ?? "").Trim();
+
+    var habit = db.Habits.FirstOrDefault(h => h.HabitId == habitId && h.UserId == userId);
+    if (habit is null) return Results.NotFound();
+
+    if (string.IsNullOrWhiteSpace(title))
+        return Results.BadRequest("Title is required.");
+
+    habit.Title = title;
+    habit.Description = string.IsNullOrWhiteSpace(description) ? null : description;
+
+    await db.SaveChangesAsync();
+    return Results.Redirect("/dashboard");
+});
+
+// DELETE
+app.MapPost("/habits/delete", async (HttpContext http, AppDbContext db) =>
+{
+    var userId = GetUserId(http);
+    if (string.IsNullOrEmpty(userId)) return Results.Unauthorized();
+    if (!http.Request.HasFormContentType) return Results.BadRequest("Invalid form.");
+
+    var form = await http.Request.ReadFormAsync();
+    if (!int.TryParse(form["HabitId"], out var habitId)) return Results.BadRequest("HabitId required.");
+
+    var habit = db.Habits.FirstOrDefault(h => h.HabitId == habitId && h.UserId == userId);
+    if (habit is null) return Results.NotFound();
+
+    db.Habits.Remove(habit);
+    await db.SaveChangesAsync();
+    return Results.Redirect("/dashboard");
+});
+
+// TOGGLE COMPLETE (mark complete/uncomplete)
+app.MapPost("/habits/toggle", async (HttpContext http, AppDbContext db) =>
+{
+    var userId = GetUserId(http);
+    if (string.IsNullOrEmpty(userId)) return Results.Unauthorized();
+    if (!http.Request.HasFormContentType) return Results.BadRequest("Invalid form.");
+
+    var form = await http.Request.ReadFormAsync();
+    if (!int.TryParse(form["HabitId"], out var habitId)) return Results.BadRequest("HabitId required.");
+
+    var habit = db.Habits.FirstOrDefault(h => h.HabitId == habitId && h.UserId == userId);
+    if (habit is null) return Results.NotFound();
+
+    // Toggle: if complete -> uncomplete; else complete now
+    habit.IsComplete = !habit.IsComplete;
+    habit.LastCompletedDate = habit.IsComplete ? DateTime.UtcNow : null;
+
+    await db.SaveChangesAsync();
+    return Results.Redirect("/dashboard");
 });
 
 // Ensure DB/migrations in dev

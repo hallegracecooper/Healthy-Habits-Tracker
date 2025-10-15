@@ -1,8 +1,22 @@
 @page "/habit/new"
-@rendermode InteractiveServer
 @attribute [Authorize]
 
 <PageTitle>New Habit</PageTitle>
-
 <h3>Add a New Habit</h3>
-<p>Form coming next section.</p>
+
+<form method="post" action="/habits/create" autocomplete="on">
+    <AntiforgeryToken />
+
+    <div class="mb-3">
+        <label for="title">Title</label>
+        <input id="title" name="Title" class="form-control" required maxlength="100" />
+    </div>
+
+    <div class="mb-3">
+        <label for="desc">Description (optional)</label>
+        <textarea id="desc" name="Description" class="form-control" maxlength="500"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Habit</button>
+    <a class="btn btn-secondary ms-2" href="/dashboard">Cancel</a>
+</form>

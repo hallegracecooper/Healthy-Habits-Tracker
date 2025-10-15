@@ -1,64 +1,100 @@
 @page "/dashboard"
-@rendermode InteractiveServer
 @attribute [Authorize]
 @using HealthyHabitsTracker.Data
 @using HealthyHabitsTracker.Models
-@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 @inject AppDbContext Db
-@inject AuthenticationStateProvider AuthStateProvider
+@inject IHttpContextAccessor HttpAccessor
 
 <PageTitle>Dashboard</PageTitle>
 
-<h3>Dashboard</h3>
+<h3>Your Habits</h3>
 
-@if (loading)
+<p>
+    <a class="btn btn-success" href="/habit/new">+ New Habit</a>
+</p>
+
+@if (habits is null)
 {
     <p>Loading...</p>
 }
-else if (userId is null)
-{
-    <p>Unable to determine user identity. Please <a href="/login">log in</a> again.</p>
-}
 else if (!habits.Any())
 {
-    <p>No habits yet. Go add one!</p>
+    <p>No habits yet. Click "New Habit" to add one.</p>
 }
 else
 {
-    <ul>
-        @foreach (var h in habits)
-        {
-            <li>
-                <strong>@h.Title</strong> - @h.Description
-                @if (h.IsComplete)
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th style="width: 300px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var h in habits)
                 {
-                    <span> (completed today)</span>
+                    <tr>
+                        <td><strong>@h.Title</strong></td>
+                        <td>@h.Description</td>
+                        <td>
+                            @if (h.IsComplete)
+                            {
+                                <span>✅ Completed</span>
+                                @if (h.LastCompletedDate is not null)
+                                {
+                                    <small class="text-muted"> (@h.LastCompletedDate?.ToLocalTime().ToString("g"))</small>
+                                }
+                            }
+                            else
+                            {
+                                <span>⏺️ Not complete</span>
+                            }
+                        </td>
+                        <td>
+                            <form method="post" action="/habits/toggle" class="d-inline">
+                                <AntiforgeryToken />
+                                <input type="hidden" name="HabitId" value="@h.HabitId" />
+                                <button type="submit" class="btn btn-outline-primary btn-sm">
+                                    @(h.IsComplete ? "Unmark" : "Mark Complete")
+                                </button>
+                            </form>
+
+                            <a class="btn btn-outline-secondary btn-sm ms-2" href="/habit/edit/@h.HabitId">Edit</a>
+
+                            <form method="post" action="/habits/delete" class="d-inline ms-2"
+                                onsubmit="return confirm('Delete this habit?');">
+                                <AntiforgeryToken />
+                                <input type="hidden" name="HabitId" value="@h.HabitId" />
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
                 }
-            </li>
-        }
-    </ul>
+            </tbody>
+        </table>
+    </div>
 }
 
 @code {
-    private bool loading = true;
-    private string? userId;
-    private List<Habit> habits = new();
+    private List<Habit>? habits;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        var state = await AuthStateProvider.GetAuthenticationStateAsync();
-        var user = state.User;
-
-        if (user.Identity?.IsAuthenticated == true)
+        var userId = HttpAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!string.IsNullOrEmpty(userId))
         {
-            userId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             habits = Db.Habits
             .Where(h => h.UserId == userId)
             .OrderByDescending(h => h.DateCreated)
-            .Take(25)
             .ToList();
         }
-
-        loading = false;
+        else
+        {
+            habits = new();
+        }
     }
 }

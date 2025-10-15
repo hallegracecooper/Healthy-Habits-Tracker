@@ -1,0 +1,59 @@
+@page "/habit/edit/{id:int}"
+@attribute [Authorize]
+@using HealthyHabitsTracker.Data
+@using HealthyHabitsTracker.Models
+@using System.Security.Claims
+@inject AppDbContext Db
+@inject NavigationManager Nav
+@inject IHttpContextAccessor HttpAccessor
+
+<PageTitle>Edit Habit</PageTitle>
+
+@if (habit is null)
+{
+            <p>Loading...</p>
+}
+else
+{
+            <h3>Edit Habit</h3>
+
+            <form method="post" action="/habits/edit" autocomplete="on">
+                <AntiforgeryToken />
+                <input type="hidden" name="HabitId" value="@habit.HabitId" />
+
+                <div class="mb-3">
+                    <label for="title">Title</label>
+                    <input id="title" name="Title" class="form-control" required maxlength="100" value="@habit.Title" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="desc">Description (optional)</label>
+                    <textarea id="desc" name="Description" class="form-control" maxlength="500">@habit.Description</textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a class="btn btn-secondary ms-2" href="/dashboard">Cancel</a>
+            </form>
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+    private Habit? habit;
+
+    protected override void OnInitialized()
+    {
+        var userId = HttpAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        habit = Db.Habits.FirstOrDefault(h => h.HabitId == id && h.UserId == userId);
+        if (habit is null)
+        {
+            // Not found or not owned — go back
+            Nav.NavigateTo("/dashboard");
+        }
+    }
+}
