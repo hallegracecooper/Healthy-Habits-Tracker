@@ -48,14 +48,11 @@ main[b-51k5rxtxqu] {
 
 @media (min-width: 641px) {
     .page[b-51k5rxtxqu] {
-        flex-direction: row;
+        flex-direction: column; /* Changed from row to column for top navbar */
     }
 
     .sidebar[b-51k5rxtxqu] {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
+        display: none; /* Hide sidebar completely */
     }
 
     .top-row[b-51k5rxtxqu] {
@@ -71,8 +68,8 @@ main[b-51k5rxtxqu] {
     }
 
     .top-row[b-51k5rxtxqu], article[b-51k5rxtxqu] {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
+        padding-left: 1rem !important; /* Reduced padding since no sidebar */
+        padding-right: 1rem !important;
     }
 }
 

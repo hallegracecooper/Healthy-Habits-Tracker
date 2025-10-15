@@ -9,32 +9,68 @@
 
 <PageTitle>Edit Habit</PageTitle>
 
-@if (habit is null)
-{
-            <p>Loading...</p>
-}
-else
-{
-            <h3>Edit Habit</h3>
-
-            <form method="post" action="/habits/edit" autocomplete="on">
-                <AntiforgeryToken />
-                <input type="hidden" name="HabitId" value="@habit.HabitId" />
-
-                <div class="mb-3">
-                    <label for="title">Title</label>
-                    <input id="title" name="Title" class="form-control" required maxlength="100" value="@habit.Title" />
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            @if (habit is null)
+            {
+                <div class="card shadow-lg">
+                    <div class="card-body text-center p-5">
+                        <div class="spinner-border text-primary mb-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="text-muted">Loading habit details...</p>
+                    </div>
                 </div>
+            }
+            else
+            {
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white">
+                        <div class="d-flex align-items-center">
+                            <span class="oi oi-pencil me-2 fs-4" aria-hidden="true"></span>
+                            <div>
+                                <h2 class="mb-0">Edit Habit</h2>
+                                <p class="mb-0 opacity-75">Update your habit details</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post" action="/habits/edit" autocomplete="on">
+                            <AntiforgeryToken />
+                            <input type="hidden" name="HabitId" value="@habit.HabitId" />
 
-                <div class="mb-3">
-                    <label for="desc">Description (optional)</label>
-                    <textarea id="desc" name="Description" class="form-control" maxlength="500">@habit.Description</textarea>
+                            <div class="mb-4">
+                                <label for="title" class="form-label">Habit Title</label>
+                                <input id="title" name="Title" class="form-control" required maxlength="100"
+                                    value="@habit.Title" placeholder="e.g., Drink 8 glasses of water daily" />
+                                <div class="form-text">Give your habit a clear, motivating title.</div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="desc" class="form-label">Description (Optional)</label>
+                                <textarea id="desc" name="Description" class="form-control" maxlength="500" rows="4"
+                                    placeholder="Add details about why this habit is important to you...">@habit.Description</textarea>
+                                <div class="form-text">Optional: Add motivation and details about your habit.</div>
+                            </div>
+
+                            <div class="d-flex gap-3">
+                                <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
+                                    <span class="oi oi-check me-2" aria-hidden="true"></span>
+                                    Save Changes
+                                </button>
+                                <a class="btn btn-secondary btn-lg" href="/dashboard">
+                                    <span class="oi oi-x me-2" aria-hidden="true"></span>
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-                <a class="btn btn-secondary ms-2" href="/dashboard">Cancel</a>
-            </form>
-}
+            }
+        </div>
+    </div>
+</div>
 
 @code {
     [Parameter] public int id { get; set; }

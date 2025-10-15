@@ -2,21 +2,51 @@
 @attribute [Authorize]
 
 <PageTitle>New Habit</PageTitle>
-<h3>Add a New Habit</h3>
 
-<form method="post" action="/habits/create" autocomplete="on">
-    <AntiforgeryToken />
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex align-items-center">
+                        <span class="oi oi-plus-circle me-2 fs-4" aria-hidden="true"></span>
+                        <div>
+                            <h2 class="mb-0">Add New Habit</h2>
+                            <p class="mb-0 opacity-75">Start building a healthy habit today</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" action="/habits/create" autocomplete="on">
+                        <AntiforgeryToken />
 
-    <div class="mb-3">
-        <label for="title">Title</label>
-        <input id="title" name="Title" class="form-control" required maxlength="100" />
+                        <div class="mb-4">
+                            <label for="title" class="form-label">Habit Title</label>
+                            <input id="title" name="Title" class="form-control" required maxlength="100"
+                                placeholder="e.g., Drink 8 glasses of water daily" />
+                            <div class="form-text">Give your habit a clear, motivating title.</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="desc" class="form-label">Description (Optional)</label>
+                            <textarea id="desc" name="Description" class="form-control" maxlength="500" rows="4"
+                                placeholder="Add details about why this habit is important to you..."></textarea>
+                            <div class="form-text">Optional: Add motivation and details about your habit.</div>
+                        </div>
+
+                        <div class="d-flex gap-3">
+                            <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
+                                <span class="oi oi-check me-2" aria-hidden="true"></span>
+                                Create Habit
+                            </button>
+                            <a class="btn btn-secondary btn-lg" href="/dashboard">
+                                <span class="oi oi-x me-2" aria-hidden="true"></span>
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="mb-3">
-        <label for="desc">Description (optional)</label>
-        <textarea id="desc" name="Description" class="form-control" maxlength="500"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Create Habit</button>
-    <a class="btn btn-secondary ms-2" href="/dashboard">Cancel</a>
-</form>
+</div>

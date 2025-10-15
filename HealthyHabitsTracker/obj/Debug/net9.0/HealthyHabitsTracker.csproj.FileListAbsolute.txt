@@ -149,7 +149,6 @@ C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE3
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\scopedcss\bundle\HealthyHabitsTracker.styles.css
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\scopedcss\projectbundle\HealthyHabitsTracker.bundle.scp.css
-C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\compressed\osgxyys93b-khy4lop6wu.gz
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\compressed\vmvzhpn1xu-bqjiyaj88i.gz
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\compressed\lnzps9s2q0-c2jlpeoesf.gz
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\compressed\kscigs9a1u-erw9l3u2r3.gz
@@ -194,8 +193,6 @@ C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE3
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\compressed\vv5smbn0tn-h1s4sie4z3.gz
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\compressed\aytknvip8p-63fj8s7r0e.gz
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\compressed\ldeh2i6zaf-0j3bgjxly4.gz
-C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\compressed\2jdht1mz3q-g8v4bda2tt.gz
-C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\compressed\qoh1wokjga-g8v4bda2tt.gz
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\staticwebassets.development.json
@@ -206,3 +203,6 @@ C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE3
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\HealthyHabitsTracker.pdb
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\HealthyHabitsTracker.genruntimeconfig.cache
 C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\ref\HealthyHabitsTracker.dll
+C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\compressed\osgxyys93b-t50l5m2yvy.gz
+C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\compressed\2jdht1mz3q-6ouhtnn5uk.gz
+C:\Users\halle\OneDrive\Documents\Halle BYUI 25\Term 5\CSE325\Group Project\CSE325-Group-Project\Healthy-Habits-Tracker\HealthyHabitsTracker\obj\Debug\net9.0\compressed\qoh1wokjga-6ouhtnn5uk.gz

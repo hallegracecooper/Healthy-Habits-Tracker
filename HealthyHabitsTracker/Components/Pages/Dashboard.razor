@@ -8,76 +8,174 @@
 
 <PageTitle>Dashboard</PageTitle>
 
-<h3>Your Habits</h3>
-
-<p>
-    <a class="btn btn-success" href="/habit/new">+ New Habit</a>
-</p>
-
-@if (habits is null)
-{
-    <p>Loading...</p>
-}
-else if (!habits.Any())
-{
-    <p>No habits yet. Click "New Habit" to add one.</p>
-}
-else
-{
-    <div class="table-responsive">
-        <table class="table table-striped align-middle">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th style="width: 300px;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var h in habits)
-                {
-                    <tr>
-                        <td><strong>@h.Title</strong></td>
-                        <td>@h.Description</td>
-                        <td>
-                            @if (h.IsComplete)
-                            {
-                                <span>✅ Completed</span>
-                                @if (h.LastCompletedDate is not null)
-                                {
-                                    <small class="text-muted"> (@h.LastCompletedDate?.ToLocalTime().ToString("g"))</small>
-                                }
-                            }
-                            else
-                            {
-                                <span>⏺️ Not complete</span>
-                            }
-                        </td>
-                        <td>
-                            <form method="post" action="/habits/toggle" class="d-inline">
-                                <AntiforgeryToken />
-                                <input type="hidden" name="HabitId" value="@h.HabitId" />
-                                <button type="submit" class="btn btn-outline-primary btn-sm">
-                                    @(h.IsComplete ? "Unmark" : "Mark Complete")
-                                </button>
-                            </form>
-
-                            <a class="btn btn-outline-secondary btn-sm ms-2" href="/habit/edit/@h.HabitId">Edit</a>
-
-                            <form method="post" action="/habits/delete" class="d-inline ms-2"
-                                onsubmit="return confirm('Delete this habit?');">
-                                <AntiforgeryToken />
-                                <input type="hidden" name="HabitId" value="@h.HabitId" />
-                                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h2 mb-1">Your Habits</h1>
+                    <p class="text-muted mb-0">Track and manage your daily habits</p>
+                </div>
+                <a class="btn btn-primary btn-lg d-flex align-items-center justify-content-center" href="/habit/new" aria-label="Add a new habit">
+                    <span class="oi oi-plus me-2" aria-hidden="true"></span>
+                    New Habit
+                </a>
+            </div>
+        </div>
     </div>
-}
+
+    <!-- Content -->
+    @if (habits is null)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status" aria-label="Loading habits">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-muted">Loading your habits...</p>
+        </div>
+    }
+    else if (!habits.Any())
+    {
+        <!-- Empty State -->
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card border-0 shadow-sm text-center py-5">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <span class="oi oi-plus-circle display-4 text-muted" aria-hidden="true"></span>
+                        </div>
+                        <h3 class="card-title">No habits yet</h3>
+                        <p class="card-text text-muted mb-4">
+                            Start building healthy habits today. Create your first habit to get started on your wellness journey.
+                        </p>
+                        <a class="btn btn-primary btn-lg" href="/habit/new" aria-label="Create your first habit">
+                            <span class="oi oi-plus me-2" aria-hidden="true"></span>
+                            Create Your First Habit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Habits Grid -->
+        <div class="row g-4">
+            @foreach (var h in habits)
+            {
+                <div class="col-xl-4 col-lg-6 col-md-6">
+                    <div class="card h-100 shadow-lg habit-card @(h.IsComplete ? "border-success" : "border-light")" 
+                         role="article" aria-labelledby="habit-title-@h.HabitId" style="border-width: 2px;">
+                        
+                        <!-- Card Header with Toggle -->
+                        <div class="card-header @(h.IsComplete ? "bg-success-subtle" : "bg-light") border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h3 id="habit-title-@h.HabitId" class="card-title h5 mb-0 text-dark">@h.Title</h3>
+                                <form method="post" action="/habits/toggle" class="d-inline">
+                                    <AntiforgeryToken />
+                                    <input type="hidden" name="HabitId" value="@h.HabitId" />
+                                    <button type="submit"
+                                            class="btn @(h.IsComplete ? "btn-success" : "btn-outline-success") btn-sm rounded-circle p-2"
+                                            aria-pressed="@h.IsComplete.ToString().ToLower()"
+                                            aria-label="@(h.IsComplete ? $"Unmark {h.Title} as complete" : $"Mark {h.Title} as complete")"
+                                            style="width: 40px; height: 40px;">
+                                        <span class="oi @(h.IsComplete ? "oi-check" : "oi-circle")" aria-hidden="true"></span>
+                                        <span class="visually-hidden">@(h.IsComplete ? "Completed" : "Not completed")</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            @if (!string.IsNullOrWhiteSpace(h.Description))
+                            {
+                                <p class="card-text text-muted mb-3">@h.Description</p>
+                            }
+
+                            <!-- Status Badge -->
+                            <div class="mb-3">
+                                @if (h.IsComplete)
+                                {
+                                    <span class="badge bg-success text-white px-3 py-2" 
+                                          role="status" aria-live="polite">
+                                        <span class="oi oi-check me-1" aria-hidden="true"></span>
+                                        Completed
+                                    </span>
+                                    @if (h.LastCompletedDate is not null)
+                                    {
+                                        <small class="text-muted d-block mt-2">
+                                            <span class="oi oi-clock me-1" aria-hidden="true"></span>
+                                            Last done: @h.LastCompletedDate?.ToLocalTime().ToString("MMM d, yyyy 'at' h:mm tt")
+                                        </small>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary text-white px-3 py-2" 
+                                          role="status" aria-live="polite">
+                                        <span class="oi oi-clock me-1" aria-hidden="true"></span>
+                                        Pending
+                                    </span>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Card Actions -->
+                        <div class="card-footer bg-transparent border-0">
+                            <div class="d-flex gap-2" role="group" aria-label="Actions for @h.Title">
+                                <a class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center flex-grow-1" 
+                                   href="/habit/edit/@h.HabitId" 
+                                   aria-label="Edit @h.Title"
+                                   style="height: 36px;">
+                                    <span class="oi oi-pencil me-1" aria-hidden="true"></span>
+                                    Edit
+                                </a>
+                                <form method="post" action="/habits/delete" class="flex-grow-1"
+                                      onsubmit="return confirm('Are you sure you want to delete \'@h.Title\'? This action cannot be undone.');">
+                                    <AntiforgeryToken />
+                                    <input type="hidden" name="HabitId" value="@h.HabitId" />
+                                    <button type="submit" 
+                                            class="btn btn-outline-danger btn-sm w-100 d-flex align-items-center justify-content-center" 
+                                            aria-label="Delete @h.Title"
+                                            style="height: 36px;">
+                                        <span class="oi oi-trash me-1" aria-hidden="true"></span>
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card border-0 bg-light">
+                    <div class="card-body py-3">
+                        <div class="row text-center">
+                            <div class="col-md-4">
+                                <div class="h4 mb-1 text-primary">@habits.Count</div>
+                                <small class="text-muted">Total Habits</small>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="h4 mb-1 text-success">@habits.Count(h => h.IsComplete)</div>
+                                <small class="text-muted">Completed Today</small>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="h4 mb-1 text-info">@Math.Round((double)habits.Count(h => h.IsComplete) / habits.Count * 100, 0)%</div>
+                                <small class="text-muted">Completion Rate</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
 
 @code {
     private List<Habit>? habits;
