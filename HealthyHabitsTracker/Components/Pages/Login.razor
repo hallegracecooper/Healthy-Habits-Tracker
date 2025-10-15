@@ -1,5 +1,27 @@
 @page "/login"
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Forms
+
 <PageTitle>Login</PageTitle>
 
 <h3>Login</h3>
-<p>Login form will go here in Day 1 Part 2.</p>
+
+<form method="post" action="/auth/login" autocomplete="on">
+    <AntiforgeryToken />
+    <div class="mb-3">
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" name="Email" type="email" class="form-control" autocomplete="email" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" name="Password" type="password" class="form-control" autocomplete="current-password"
+            minlength="6" required />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Login</button>
+</form>
+
+<p class="mt-3">
+    New here? <a href="/register">Create an account</a>
+</p>

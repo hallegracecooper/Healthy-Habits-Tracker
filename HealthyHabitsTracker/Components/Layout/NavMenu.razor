@@ -1,4 +1,6 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">HealthyHabitsTracker</a>
     </div>
@@ -20,16 +22,24 @@
             </NavLink>
         </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="login">
-                <span class="oi oi-account-login" aria-hidden="true"></span> Login
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="register">
-                <span class="oi oi-person" aria-hidden="true"></span> Register
-            </NavLink>
-        </div>
+        <AuthorizeView>
+            <Authorized>
+                <div class="nav-item px-3">
+                    <span>Hello!</span>
+                    <form method="post" action="/auth/logout" class="d-inline">
+                        <AntiforgeryToken />
+                        <button class="btn btn-link" type="submit">Logout</button>
+                    </form>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <NavLink class="nav-link" href="login">
+                    Login
+                </NavLink>
+                <NavLink class="nav-link" href="register">
+                    Register
+                </NavLink>
+            </NotAuthorized>
+        </AuthorizeView>
     </nav>
 </div>
