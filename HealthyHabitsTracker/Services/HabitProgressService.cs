@@ -4,10 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HealthyHabitsTracker.Services
 {
+    /// <summary>
+    /// Service for calculating habit progress metrics including streaks and weekly summaries
+    /// Handles all business logic related to habit completion tracking and progress calculations
+    /// </summary>
     public class HabitProgressService
     {
         private readonly AppDbContext _context;
 
+        /// <summary>
+        /// Initializes the progress service with database context
+        /// </summary>
+        /// <param name="context">Entity Framework database context for data access</param>
         public HabitProgressService(AppDbContext context)
         {
             _context = context;

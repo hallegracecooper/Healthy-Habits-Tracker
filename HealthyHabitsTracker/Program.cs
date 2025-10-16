@@ -8,65 +8,83 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 
+/// <summary>
+/// Main application entry point for Healthy Habits Tracker
+/// Configures services, middleware, and API endpoints for the habit tracking application
+/// </summary>
 var builder = WebApplication.CreateBuilder(args);
 
-// Razor + Blazor (Server interactivity)
+// ===================== SERVICE CONFIGURATION =====================
+
+// Razor + Blazor (Server interactivity) - Enables server-side Blazor components
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// EF Core (SQLite)
+// EF Core (SQLite) - Database configuration with SQLite for local development
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                       ?? "Data Source=app.db";
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(connectionString)
 );
 
-// Authentication & Authorization (Cookies)
+// Authentication & Authorization (Cookies) - Secure user authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/login";
-        options.LogoutPath = "/logout";
-        options.AccessDeniedPath = "/login";
-        options.Cookie.Name = "HHT.Auth";
-        options.SlidingExpiration = true;
+        options.LoginPath = "/login";           // Redirect to login page when not authenticated
+        options.LogoutPath = "/logout";          // Logout endpoint
+        options.AccessDeniedPath = "/login";     // Redirect to login on access denied
+        options.Cookie.Name = "HHT.Auth";       // Custom cookie name for the application
+        options.SlidingExpiration = true;       // Extend session on activity
     });
 
-builder.Services.AddAuthorization();
-builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddAuthorization();           // Enable authorization policies
+builder.Services.AddCascadingAuthenticationState(); // Make auth state available to components
 
+// HTTP services for external requests and context access
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 
-// Register services
+// Register custom business logic services
 builder.Services.AddScoped<HealthyHabitsTracker.Services.HabitProgressService>();
 
 var app = builder.Build();
 
-// Pipeline
+// ===================== MIDDLEWARE PIPELINE =====================
+
+// Error handling configuration
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+    app.UseExceptionHandler("/Error");  // Custom error page for production
+    app.UseHsts();                      // HTTP Strict Transport Security
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+// Security and static file middleware
+app.UseHttpsRedirection();             // Redirect HTTP to HTTPS
+app.UseStaticFiles();                  // Serve static files (CSS, JS, images)
 
-app.UseAuthentication();
-app.UseAuthorization();
+// Authentication and authorization middleware (order matters!)
+app.UseAuthentication();               // Must come before UseAuthorization
+app.UseAuthorization();                // Enable authorization policies
 
 // IMPORTANT: Antiforgery must be enabled for Blazor endpoints.
 // (Keep it ON globally; we'll selectively disable it on auth APIs.)
 app.UseAntiforgery();
 
-// Map the Blazor app
+// Map the Blazor application with server-side interactivity
 app.MapRazorComponents<App>()
    .AddInteractiveServerRenderMode();
 
+// ===================== API ENDPOINTS =====================
+
 // --- Minimal APIs for Register/Login/Logout --- //
 
-// Helper to read either JSON or form
+/// <summary>
+/// Helper method to read authentication credentials from either JSON or form data
+/// Supports both API and web form submissions for maximum flexibility
+/// </summary>
+/// <param name="req">The HTTP request containing credentials</param>
+/// <returns>Tuple containing email and password, or null values if not found</returns>
 static async Task<(string? Email, string? Password)> ReadCredsAsync(HttpRequest req)
 {
     if (req.HasJsonContentType())
@@ -98,48 +116,61 @@ static async Task<(string? Email, string? Password)> ReadCredsAsync(HttpRequest 
     return (null, null);
 }
 
-// Register (accepts JSON or form)
+/// <summary>
+/// User registration endpoint - Creates new user accounts with secure password hashing
+/// Supports both JSON API calls and form submissions for maximum flexibility
+/// </summary>
+/// <param name="req">HTTP request containing user credentials</param>
+/// <param name="db">Database context for user storage</param>
+/// <param name="http">HTTP context for authentication</param>
+/// <returns>Redirect to dashboard on success, error response on failure</returns>
 app.MapPost("/auth/register", async (HttpRequest req, AppDbContext db, HttpContext http) =>
 {
+    // Extract credentials from request (JSON or form)
     var (rawEmail, rawPassword) = await ReadCredsAsync(req);
     var email = (rawEmail ?? "").Trim().ToLowerInvariant();
     var password = (rawPassword ?? "").Trim();
 
+    // Validate required fields
     if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
         return Results.BadRequest("Email and password are required.");
 
+    // Check for existing user to prevent duplicates
     if (db.Users.Any(u => u.Email == email))
         return Results.Conflict("An account with this email already exists.");
 
+    // Create new user with unique ID
     var user = new HealthyHabitsTracker.Models.AppUser
     {
-        UserId = Guid.NewGuid().ToString("N"),
+        UserId = Guid.NewGuid().ToString("N"),  // Generate unique user identifier
         Email = email
     };
 
+    // Hash password securely using ASP.NET Identity PasswordHasher
     var hasher = new PasswordHasher<HealthyHabitsTracker.Models.AppUser>();
     user.PasswordHash = hasher.HashPassword(user, password);
 
+    // Save user to database
     db.Users.Add(user);
     await db.SaveChangesAsync();
 
-    // Sign in
+    // Automatically sign in the new user
     var claims = new List<Claim>
     {
-        new Claim(ClaimTypes.NameIdentifier, user.UserId),
-        new Claim(ClaimTypes.Name, user.Email),
-        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(ClaimTypes.NameIdentifier, user.UserId),  // Primary user identifier
+        new Claim(ClaimTypes.Name, user.Email),             // Display name
+        new Claim(ClaimTypes.Email, user.Email),            // Email for identification
     };
     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
     var principal = new ClaimsPrincipal(identity);
 
     await http.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-    // For form posts, redirect to dashboard; for JSON, Ok is fine
+    // Handle different response types based on request content type
     if (req.HasFormContentType)
-        return Results.Redirect("/dashboard");
-
-    return Results.Ok();
+        return Results.Redirect("/dashboard");  // Web form submission - redirect to dashboard
+    else
+        return Results.Ok();                    // API call - return success status
 }); // NOTE: do NOT disable antiforgery here now
 
 // Login (accepts JSON or form)

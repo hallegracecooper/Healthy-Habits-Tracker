@@ -1,9 +1,16 @@
+@* 
+    Dashboard Page - Main interface for habit tracking
+    Displays all user habits with completion status, progress tracking, and management options
+    Features: habit cards, progress statistics, streak tracking, and weekly summaries
+*@
 @page "/dashboard"
-@attribute [Authorize]
+@attribute [Authorize] // Require user authentication to access this page
 @using HealthyHabitsTracker.Data
 @using HealthyHabitsTracker.Models
 @using HealthyHabitsTracker.Services
 @using System.Security.Claims
+
+@* Dependency injection for database access, HTTP context, and progress calculations *@
 @inject AppDbContext Db
 @inject IHttpContextAccessor HttpAccessor
 @inject HabitProgressService ProgressService
@@ -251,24 +258,42 @@
 </div>
 
 @code {
+    // ===================== COMPONENT STATE =====================
+    
+    /// <summary>List of user's habits loaded from database</summary>
     private List<Habit>? habits;
+    
+    /// <summary>Progress statistics including weekly completion rates and totals</summary>
     private HabitProgressStats progressStats = new();
+    
+    /// <summary>Current authenticated user's unique identifier</summary>
     private string? userId;
+    
+    /// <summary>Pre-calculated streak counts for each habit to improve performance</summary>
     private Dictionary<int, int> habitStreaks = new();
 
+    /// <summary>
+    /// Component initialization - Loads user data and calculates progress metrics
+    /// Called when the component is first rendered
+    /// </summary>
     protected override async Task OnInitializedAsync()
     {
+        // Get the current user's ID from the authentication context
         userId = HttpAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
         if (!string.IsNullOrEmpty(userId))
         {
+            // Load all habits for the current user, ordered by creation date (newest first)
             habits = Db.Habits
-            .Where(h => h.UserId == userId)
-            .OrderByDescending(h => h.DateCreated)
-            .ToList();
+                .Where(h => h.UserId == userId)
+                .OrderByDescending(h => h.DateCreated)
+                .ToList();
 
+            // Calculate overall progress statistics for the user
             progressStats = await ProgressService.GetProgressStatsAsync(userId);
 
-            // Pre-calculate streaks for all habits
+            // Pre-calculate streaks for all habits to avoid repeated database calls
+            // This improves performance by batching streak calculations
             if (habits.Any())
             {
                 foreach (var habit in habits)
@@ -279,10 +304,17 @@
         }
         else
         {
+            // No authenticated user - show empty state
             habits = new();
         }
     }
 
+    /// <summary>
+    /// Gets the current streak count for a specific habit
+    /// Uses pre-calculated values for better performance
+    /// </summary>
+    /// <param name="habitId">The ID of the habit to get the streak for</param>
+    /// <returns>The current streak count, or 0 if not found</returns>
     private int GetCurrentStreak(int habitId)
     {
         return habitStreaks.TryGetValue(habitId, out var streak) ? streak : 0;
