@@ -21,7 +21,6 @@
                 </div>
                 <a class="btn btn-primary btn-lg d-flex align-items-center justify-content-center" href="/habit/new"
                     aria-label="Add a new habit">
-                    <span class="oi oi-plus me-2" aria-hidden="true"></span>
                     New Habit
                 </a>
             </div>
@@ -54,7 +53,6 @@
                             journey.
                         </p>
                         <a class="btn btn-primary btn-lg" href="/habit/new" aria-label="Create your first habit">
-                            <span class="oi oi-plus me-2" aria-hidden="true"></span>
                             Create Your First Habit
                         </a>
                     </div>
@@ -84,7 +82,6 @@
                                         aria-pressed="@h.IsComplete.ToString().ToLower()"
                                         aria-label="@(h.IsComplete ? $"Unmark {h.Title} as complete" : $"Mark {h.Title} as complete")"
                                         style="width: 40px; height: 40px;">
-                                        <span class="oi @(h.IsComplete ? "oi-check" : "oi-circle")" aria-hidden="true"></span>
                                         <span class="visually-hidden">@(h.IsComplete ? "Completed" : "Not completed")</span>
                                     </button>
                                 </form>
@@ -103,13 +100,11 @@
                                 @if (h.IsComplete)
                                 {
                                     <span class="badge bg-success text-white px-3 py-2" role="status" aria-live="polite">
-                                        <span class="oi oi-check me-1" aria-hidden="true"></span>
                                         Completed
                                     </span>
                                     @if (h.LastCompletedDate is not null)
                                     {
                                         <small class="text-muted d-block mt-2">
-                                            <span class="oi oi-clock me-1" aria-hidden="true"></span>
                                             Last done: @h.LastCompletedDate?.ToLocalTime().ToString("MMM d, yyyy 'at' h:mm tt")
                                         </small>
                                     }
@@ -117,7 +112,6 @@
                                 else
                                 {
                                     <span class="badge bg-secondary text-white px-3 py-2" role="status" aria-live="polite">
-                                        <span class="oi oi-clock me-1" aria-hidden="true"></span>
                                         Pending
                                     </span>
                                 }
@@ -127,7 +121,6 @@
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <small class="text-muted">
-                                        <span class="oi oi-fire me-1" aria-hidden="true"></span>
                                         Current Streak
                                     </small>
                                     <span class="badge bg-warning text-dark">@GetCurrentStreak(h.HabitId)</span>
@@ -140,7 +133,6 @@
                             <div class="d-flex gap-2" role="group" aria-label="Actions for @h.Title">
                                 <a class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center flex-grow-1"
                                     href="/habit/edit/@h.HabitId" aria-label="Edit @h.Title" style="height: 36px;">
-                                    <span class="oi oi-pencil me-1" aria-hidden="true"></span>
                                     Edit
                                 </a>
                                 <form method="post" action="/habits/delete" class="flex-grow-1"
@@ -150,7 +142,6 @@
                                     <button type="submit"
                                         class="btn btn-outline-danger btn-sm w-100 d-flex align-items-center justify-content-center"
                                         aria-label="Delete @h.Title" style="height: 36px;">
-                                        <span class="oi oi-trash me-1" aria-hidden="true"></span>
                                         Delete
                                     </button>
                                 </form>
