@@ -10,6 +10,7 @@ namespace HealthyHabitsTracker.Data
 
         public DbSet<Habit> Habits => Set<Habit>();
         public DbSet<AppUser> Users => Set<AppUser>();
+        public DbSet<HabitCompletion> HabitCompletions => Set<HabitCompletion>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -17,6 +18,14 @@ namespace HealthyHabitsTracker.Data
 
             modelBuilder.Entity<Habit>()
                 .HasIndex(h => new { h.UserId, h.Title })
+                .IsUnique(false);
+
+            modelBuilder.Entity<HabitCompletion>()
+                .HasIndex(hc => new { hc.HabitId, hc.CompletionDate })
+                .IsUnique(false);
+
+            modelBuilder.Entity<HabitCompletion>()
+                .HasIndex(hc => new { hc.UserId, hc.CompletionDate })
                 .IsUnique(false);
         }
     }

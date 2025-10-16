@@ -38,6 +38,9 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 
+// Register services
+builder.Services.AddScoped<HealthyHabitsTracker.Services.HabitProgressService>();
+
 var app = builder.Build();
 
 // Pipeline
@@ -271,9 +274,24 @@ app.MapPost("/habits/toggle", async (HttpContext http, AppDbContext db) =>
     var habit = db.Habits.FirstOrDefault(h => h.HabitId == habitId && h.UserId == userId);
     if (habit is null) return Results.NotFound();
 
+    // Get the progress service
+    var progressService = http.RequestServices.GetRequiredService<HealthyHabitsTracker.Services.HabitProgressService>();
+
     // Toggle: if complete -> uncomplete; else complete now
-    habit.IsComplete = !habit.IsComplete;
-    habit.LastCompletedDate = habit.IsComplete ? DateTime.UtcNow : null;
+    if (habit.IsComplete)
+    {
+        // Currently complete, so uncomplete
+        habit.IsComplete = false;
+        habit.LastCompletedDate = null;
+        await progressService.RemoveCompletionAsync(habitId, userId);
+    }
+    else
+    {
+        // Currently incomplete, so complete
+        habit.IsComplete = true;
+        habit.LastCompletedDate = DateTime.UtcNow;
+        await progressService.RecordCompletionAsync(habitId, userId);
+    }
 
     await db.SaveChangesAsync();
     return Results.Redirect("/dashboard");

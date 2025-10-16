@@ -2,9 +2,11 @@
 @attribute [Authorize]
 @using HealthyHabitsTracker.Data
 @using HealthyHabitsTracker.Models
+@using HealthyHabitsTracker.Services
 @using System.Security.Claims
 @inject AppDbContext Db
 @inject IHttpContextAccessor HttpAccessor
+@inject HabitProgressService ProgressService
 
 <PageTitle>Dashboard</PageTitle>
 
@@ -17,7 +19,8 @@
                     <h1 class="h2 mb-1">Your Habits</h1>
                     <p class="text-muted mb-0">Track and manage your daily habits</p>
                 </div>
-                <a class="btn btn-primary btn-lg d-flex align-items-center justify-content-center" href="/habit/new" aria-label="Add a new habit">
+                <a class="btn btn-primary btn-lg d-flex align-items-center justify-content-center" href="/habit/new"
+                    aria-label="Add a new habit">
                     <span class="oi oi-plus me-2" aria-hidden="true"></span>
                     New Habit
                 </a>
@@ -47,7 +50,8 @@
                         </div>
                         <h3 class="card-title">No habits yet</h3>
                         <p class="card-text text-muted mb-4">
-                            Start building healthy habits today. Create your first habit to get started on your wellness journey.
+                            Start building healthy habits today. Create your first habit to get started on your wellness
+                            journey.
                         </p>
                         <a class="btn btn-primary btn-lg" href="/habit/new" aria-label="Create your first habit">
                             <span class="oi oi-plus me-2" aria-hidden="true"></span>
@@ -65,9 +69,9 @@
             @foreach (var h in habits)
             {
                 <div class="col-xl-4 col-lg-6 col-md-6">
-                    <div class="card h-100 shadow-lg habit-card @(h.IsComplete ? "border-success" : "border-light")" 
-                         role="article" aria-labelledby="habit-title-@h.HabitId" style="border-width: 2px;">
-                        
+                    <div class="card h-100 shadow-lg habit-card @(h.IsComplete ? "border-success" : "border-light")"
+                        role="article" aria-labelledby="habit-title-@h.HabitId" style="border-width: 2px;">
+
                         <!-- Card Header with Toggle -->
                         <div class="card-header @(h.IsComplete ? "bg-success-subtle" : "bg-light") border-0">
                             <div class="d-flex justify-content-between align-items-center">
@@ -76,10 +80,10 @@
                                     <AntiforgeryToken />
                                     <input type="hidden" name="HabitId" value="@h.HabitId" />
                                     <button type="submit"
-                                            class="btn @(h.IsComplete ? "btn-success" : "btn-outline-success") btn-sm rounded-circle p-2"
-                                            aria-pressed="@h.IsComplete.ToString().ToLower()"
-                                            aria-label="@(h.IsComplete ? $"Unmark {h.Title} as complete" : $"Mark {h.Title} as complete")"
-                                            style="width: 40px; height: 40px;">
+                                        class="btn @(h.IsComplete ? "btn-success" : "btn-outline-success") btn-sm rounded-circle p-2"
+                                        aria-pressed="@h.IsComplete.ToString().ToLower()"
+                                        aria-label="@(h.IsComplete ? $"Unmark {h.Title} as complete" : $"Mark {h.Title} as complete")"
+                                        style="width: 40px; height: 40px;">
                                         <span class="oi @(h.IsComplete ? "oi-check" : "oi-circle")" aria-hidden="true"></span>
                                         <span class="visually-hidden">@(h.IsComplete ? "Completed" : "Not completed")</span>
                                     </button>
@@ -98,8 +102,7 @@
                             <div class="mb-3">
                                 @if (h.IsComplete)
                                 {
-                                    <span class="badge bg-success text-white px-3 py-2" 
-                                          role="status" aria-live="polite">
+                                    <span class="badge bg-success text-white px-3 py-2" role="status" aria-live="polite">
                                         <span class="oi oi-check me-1" aria-hidden="true"></span>
                                         Completed
                                     </span>
@@ -113,33 +116,40 @@
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary text-white px-3 py-2" 
-                                          role="status" aria-live="polite">
+                                    <span class="badge bg-secondary text-white px-3 py-2" role="status" aria-live="polite">
                                         <span class="oi oi-clock me-1" aria-hidden="true"></span>
                                         Pending
                                     </span>
                                 }
+                            </div>
+
+                            <!-- Streak Information -->
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <span class="oi oi-fire me-1" aria-hidden="true"></span>
+                                        Current Streak
+                                    </small>
+                                    <span class="badge bg-warning text-dark">@GetCurrentStreak(h.HabitId)</span>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Card Actions -->
                         <div class="card-footer bg-transparent border-0">
                             <div class="d-flex gap-2" role="group" aria-label="Actions for @h.Title">
-                                <a class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center flex-grow-1" 
-                                   href="/habit/edit/@h.HabitId" 
-                                   aria-label="Edit @h.Title"
-                                   style="height: 36px;">
+                                <a class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center flex-grow-1"
+                                    href="/habit/edit/@h.HabitId" aria-label="Edit @h.Title" style="height: 36px;">
                                     <span class="oi oi-pencil me-1" aria-hidden="true"></span>
                                     Edit
                                 </a>
                                 <form method="post" action="/habits/delete" class="flex-grow-1"
-                                      onsubmit="return confirm('Are you sure you want to delete \'@h.Title\'? This action cannot be undone.');">
+                                    onsubmit="return confirm('Are you sure you want to delete \'@h.Title\'? This action cannot be undone.');">
                                     <AntiforgeryToken />
                                     <input type="hidden" name="HabitId" value="@h.HabitId" />
-                                    <button type="submit" 
-                                            class="btn btn-outline-danger btn-sm w-100 d-flex align-items-center justify-content-center" 
-                                            aria-label="Delete @h.Title"
-                                            style="height: 36px;">
+                                    <button type="submit"
+                                        class="btn btn-outline-danger btn-sm w-100 d-flex align-items-center justify-content-center"
+                                        aria-label="Delete @h.Title" style="height: 36px;">
                                         <span class="oi oi-trash me-1" aria-hidden="true"></span>
                                         Delete
                                     </button>
@@ -151,25 +161,97 @@
             }
         </div>
 
-        <!-- Stats Summary -->
+        <!-- Progress Cards -->
         <div class="row mt-5">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <span class="oi oi-target display-4 text-primary" aria-hidden="true"></span>
+                        </div>
+                        <div class="h3 mb-1 text-primary">@progressStats.TotalHabits</div>
+                        <small class="text-muted">Total Habits</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <span class="oi oi-check display-4 text-success" aria-hidden="true"></span>
+                        </div>
+                        <div class="h3 mb-1 text-success">@habits.Count(h => h.IsComplete)</div>
+                        <small class="text-muted">Completed Today</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <span class="oi oi-calendar display-4 text-info" aria-hidden="true"></span>
+                        </div>
+                        <div class="h3 mb-1 text-info">@progressStats.WeeklyCompletions</div>
+                        <small class="text-muted">This Week</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <span class="oi oi-graph display-4 text-warning" aria-hidden="true"></span>
+                        </div>
+                        <div class="h3 mb-1 text-warning">@Math.Round(progressStats.WeeklyCompletionRate, 0)%</div>
+                        <small class="text-muted">Weekly Rate</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Progress Bar -->
+        <div class="row mt-4">
             <div class="col-12">
-                <div class="card border-0 bg-light">
-                    <div class="card-body py-3">
-                        <div class="row text-center">
-                            <div class="col-md-4">
-                                <div class="h4 mb-1 text-primary">@habits.Count</div>
-                                <small class="text-muted">Total Habits</small>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="h4 mb-1 text-success">@habits.Count(h => h.IsComplete)</div>
-                                <small class="text-muted">Completed Today</small>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="h4 mb-1 text-info">@Math.Round((double)habits.Count(h => h.IsComplete) / habits.Count * 100, 0)%</div>
-                                <small class="text-muted">Completion Rate</small>
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <span class="oi oi-bar-chart me-2" aria-hidden="true"></span>
+                            Weekly Progress
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-medium">Completion Progress</span>
+                            <span class="text-muted">@progressStats.WeeklyCompletions completions this week</span>
+                        </div>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar bg-success" role="progressbar"
+                                style="width: @(progressStats.WeeklyCompletionRate)%"
+                                aria-valuenow="@progressStats.WeeklyCompletionRate" aria-valuemin="0" aria-valuemax="100">
+                                @Math.Round(progressStats.WeeklyCompletionRate, 0)%
                             </div>
                         </div>
+                        <small class="text-muted mt-2 d-block">
+                            @if (progressStats.WeeklyCompletionRate >= 80)
+                            {
+                                <span class="text-success">🎉 Excellent progress this week!</span>
+                            }
+                            else if (progressStats.WeeklyCompletionRate >= 60)
+                            {
+                                <span class="text-info">👍 Good progress, keep it up!</span>
+                            }
+                            else if (progressStats.WeeklyCompletionRate >= 40)
+                            {
+                                <span class="text-warning">💪 You're making progress!</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">🌟 Every step counts - keep going!</span>
+                            }
+                        </small>
                     </div>
                 </div>
             </div>
@@ -179,20 +261,39 @@
 
 @code {
     private List<Habit>? habits;
+    private HabitProgressStats progressStats = new();
+    private string? userId;
+    private Dictionary<int, int> habitStreaks = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        var userId = HttpAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        userId = HttpAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (!string.IsNullOrEmpty(userId))
         {
             habits = Db.Habits
             .Where(h => h.UserId == userId)
             .OrderByDescending(h => h.DateCreated)
             .ToList();
+
+            progressStats = await ProgressService.GetProgressStatsAsync(userId);
+
+            // Pre-calculate streaks for all habits
+            if (habits.Any())
+            {
+                foreach (var habit in habits)
+                {
+                    habitStreaks[habit.HabitId] = await ProgressService.GetCurrentStreakAsync(habit.HabitId, userId);
+                }
+            }
         }
         else
         {
             habits = new();
         }
+    }
+
+    private int GetCurrentStreak(int habitId)
+    {
+        return habitStreaks.TryGetValue(habitId, out var streak) ? streak : 0;
     }
 }
